@@ -24,7 +24,7 @@ const FILES_TO_CACHE = [
   });
   
   self.addEventListener('activate', (evt) => {
-    const currentCaches = [PRECACHE, RUNTIME];
+    const currentCaches = [CACHE_NAME, DATA_CACHE_NAME];
     evt.waitUntil(
       caches
         .keys()
@@ -50,7 +50,7 @@ const FILES_TO_CACHE = [
             return cachedResponse;
           }
   
-          return caches.open(RUNTIME).then((cache) => {
+          return caches.open(DATA_CACHE_NAME).then((cache) => {
             return fetch(evt.request).then((response) => {
               return cache.put(evt.request, response.clone()).then(() => {
                 return response;
