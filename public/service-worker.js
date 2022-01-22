@@ -11,19 +11,18 @@ const FILES_TO_CACHE = [
     'https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css',
   ];
   
-  const PRECACHE = 'precache-v1';
-  const RUNTIME = 'runtime';
+  const CACHE_NAME = 'static-cache-v2';
+  const DATA_CACHE_NAME = 'data-cache-v1';
   
   self.addEventListener('install', (event) => {
     event.waitUntil(
       caches
-        .open(PRECACHE)
+        .open(CACHE_NAME)
         .then((cache) => cache.addAll(FILES_TO_CACHE))
         .then(self.skipWaiting())
     );
   });
   
-  // The activate handler takes care of cleaning up old caches.
   self.addEventListener('activate', (event) => {
     const currentCaches = [PRECACHE, RUNTIME];
     event.waitUntil(
