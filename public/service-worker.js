@@ -14,8 +14,8 @@ const FILES_TO_CACHE = [
   const CACHE_NAME = 'static-cache-v2';
   const DATA_CACHE_NAME = 'data-cache-v1';
   
-  self.addEventListener('install', (event) => {
-    event.waitUntil(
+  self.addEventListener('install', (evt) => {
+    evt.waitUntil(
       caches
         .open(CACHE_NAME)
         .then((cache) => cache.addAll(FILES_TO_CACHE))
@@ -23,9 +23,9 @@ const FILES_TO_CACHE = [
     );
   });
   
-  self.addEventListener('activate', (event) => {
+  self.addEventListener('activate', (evt) => {
     const currentCaches = [PRECACHE, RUNTIME];
-    event.waitUntil(
+    evt.waitUntil(
       caches
         .keys()
         .then((cacheNames) => {
@@ -42,17 +42,17 @@ const FILES_TO_CACHE = [
     );
   });
   
-  self.addEventListener('fetch', (event) => {
-    if (event.request.url.startsWith(self.location.origin)) {
-      event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
+  self.addEventListener('fetch', (evt) => {
+    if (evt.request.url.startsWith(self.location.origin)) {
+      evt.respondWith(
+        caches.match(evt.request).then((cachedResponse) => {
           if (cachedResponse) {
             return cachedResponse;
           }
   
           return caches.open(RUNTIME).then((cache) => {
-            return fetch(event.request).then((response) => {
-              return cache.put(event.request, response.clone()).then(() => {
+            return fetch(evt.request).then((response) => {
+              return cache.put(evt.request, response.clone()).then(() => {
                 return response;
               });
             });
